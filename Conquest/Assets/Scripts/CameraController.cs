@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour {
 
-	private int ScrollWidth = 15;
+	private int ScrollWidth = 15; 
 	public int ScrollSpeed = 25;
 
 
