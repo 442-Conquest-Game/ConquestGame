@@ -5,7 +5,7 @@ public class UnitScript : MonoBehaviour {
 
 	private Vector3 Destination_pos;
 	private Vector3 Origin_pos;
-	public float UnitCount, troopNum;
+	public float UnitCount, EnemyCount, troopNum;
 	public BuildingScript base_red, base_blue;
 	public GameObject base_red_parent, base_blue_parent;
 	//private string ObjectName, ObjectName_Destination;
@@ -22,12 +22,13 @@ public class UnitScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.position = Vector3.MoveTowards (transform.position, Destination_pos, Time.deltaTime * 5);
-
+		transform.position = Vector3.MoveTowards (transform.position, Destination_pos, Time.deltaTime * 2);
+		GetComponentInChildren < TextMesh > ().text = Mathf.Round (UnitCount).ToString ();
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
 		Debug.Log ("TRIGGER");
+
 		if (transform.name == "unit_red") {
 			if (other.gameObject.transform.name == "base_blue") {
 				BuildingScript buildingScript = other.gameObject.GetComponent< BuildingScript >();
@@ -46,6 +47,18 @@ public class UnitScript : MonoBehaviour {
 					NewBuildingScript.TroopNum = -(troopNum-UnitCount);
 				}
 				Destroy (gameObject);
+			}
+			if(other.gameObject.transform.name == "base_red" && other.gameObject.transform.position != Origin_pos){
+				BuildingScript buildingScript = other.gameObject.GetComponent< BuildingScript >();
+				troopNum = buildingScript.TroopNum;
+				buildingScript.TroopNum = troopNum + UnitCount;
+				Destroy (gameObject);
+			}
+			if(other.gameObject.transform.name == "unit_blue"){
+				UnitScript unit_script = other.gameObject.GetComponent < UnitScript >();
+				EnemyCount = unit_script.UnitCount;
+				unit_script.UnitCount = EnemyCount-UnitCount;
+				UnitCount = UnitCount - EnemyCount;
 			}
 		}
 		if (transform.name == "unit_blue") {
@@ -69,6 +82,22 @@ public class UnitScript : MonoBehaviour {
 				}
 				Destroy (gameObject);
 			}
+			if(other.gameObject.transform.name == "base_blue" && other.gameObject.transform.position != Origin_pos){
+				BuildingScript buildingScript = other.gameObject.GetComponent< BuildingScript >();
+				troopNum = buildingScript.TroopNum;
+				buildingScript.TroopNum = troopNum + UnitCount;
+				Destroy (gameObject);
+			}
+			if(other.gameObject.transform.name == "unit_red"){
+				UnitScript unit_script = other.gameObject.GetComponent < UnitScript >();
+				EnemyCount = unit_script.UnitCount;
+				unit_script.UnitCount = EnemyCount-UnitCount;
+				UnitCount = UnitCount - EnemyCount;
+			}
 		}
+		if (UnitCount < 0) {
+			Destroy (gameObject);
+		}
+		GetComponentInChildren < TextMesh > ().text = Mathf.Round (UnitCount).ToString ();
 	}
 }
