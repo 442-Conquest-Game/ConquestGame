@@ -11,7 +11,8 @@ public class DisplayScript : MonoBehaviour {
 	private bool attack = false;
 	public bool instantiate_unit = false;
 	public float troop_num, unit_count;
-	private Transform attacker;
+    private Transform attacker;
+   
 
 	
 	// Use this for initialization
@@ -21,6 +22,7 @@ public class DisplayScript : MonoBehaviour {
 
 	void Update() {
 		if (attack) {
+            //If we're attacking, make a ray where the mouse is pointing.
 			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit;
 			if (Physics.Raycast (ray, out hit) && Input.GetMouseButtonDown (0)){
@@ -58,7 +60,7 @@ public class DisplayScript : MonoBehaviour {
 			building_origin_pos = hit.transform.position;
 		}
 		GUI.Label (new Rect (20, 10, 100, 20), buildingName);
-		if (buildingName == "base_red" || buildingName == "base_blue") {
+       	if (buildingName == "base_red" || buildingName == "base_blue") {
 			if (GUI.Button (new Rect (20, 100, 60, 20), "Attack")){
 
 				attack = true;

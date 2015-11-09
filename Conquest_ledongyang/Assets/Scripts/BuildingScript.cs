@@ -4,20 +4,24 @@ using System.Collections;
 
 public class BuildingScript : MonoBehaviour {
 
-	private float troopSpawnRate = 1f;
-	public float TroopNum = 0f;
+	private float troopSpawnRate = 1;
+	public float TroopNum = 0;
 	public UnitScript unit_red, unit_blue;
 	private Vector3 instantiate_pos;
-
-
+   
+    
+   
 	// Use this for initialization
 	void Start () {
+        //This is to show the starting troop number.
 		GetComponentInChildren< TextMesh > ().text = TroopNum.ToString ();
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        //Troops are incremented by 1 to the castle every second.
+        //The units are instantiated right where the building is.
 		TroopNum = TroopNum + (Time.deltaTime * troopSpawnRate);
 		GameObject display = GameObject.Find ("Display");
 		DisplayScript displayScript = display.GetComponent< DisplayScript > ();
@@ -47,7 +51,20 @@ public class BuildingScript : MonoBehaviour {
 		GetComponentInChildren< TextMesh > ().text = Mathf.Round (TroopNum).ToString ();
 	    
 		if (TroopNum < 0) {
-			Destroy (gameObject);
+            GameObject current = gameObject;
+            Debug.Log(current.transform.position);
+            if (displayScript.buildingName == "base_blue")
+            {
+                Debug.Log("Changed to red");
+                displayScript.buildingName = "base_red";
+
+            }
+            else if (displayScript.buildingName == "base_red")
+            {
+                Debug.Log("Changed to blue");
+                displayScript.buildingName = "base_blue";
+            }
+			Destroy (current);
 		}
 	}
 

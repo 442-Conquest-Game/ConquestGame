@@ -35,11 +35,11 @@ public class UnitScript : MonoBehaviour {
 				troopNum = buildingScript.TroopNum;
 				buildingScript.TroopNum = troopNum - UnitCount;
 				if(troopNum-UnitCount < 0){
-					GameObject display = GameObject.Find ("Display");
+                    GameObject display = GameObject.Find ("Display");
 					DisplayScript displayScript = display.GetComponent < DisplayScript > ();
-					Destination_pos = displayScript.building_destination_pos;
-
-					BuildingScript base_red_clone = (BuildingScript) Instantiate (base_red, Destination_pos, Quaternion.identity);
+                    Vector3 building_pos = other.gameObject.transform.position;
+                    //  Destination_pos = displayScript.building_destination_pos; // This may be the problem
+                    BuildingScript base_red_clone = (BuildingScript)Instantiate(base_red, building_pos, Quaternion.identity);
 					base_red_clone.transform.name = "base_red";
 //					base_red_clone.transform.parent = base_red_parent.transform;
 //					base_red_clone.transform.parent.name = "base_red";
@@ -71,9 +71,10 @@ public class UnitScript : MonoBehaviour {
 				if(troopNum-UnitCount < 0){
 					GameObject display = GameObject.Find ("Display");
 					DisplayScript displayScript = display.GetComponent < DisplayScript > ();
-					Destination_pos = displayScript.building_destination_pos;
+                    Vector3 building_pos = other.gameObject.transform.position;
+                   // Destination_pos = displayScript.building_destination_pos;
 
-					BuildingScript base_blue_clone = (BuildingScript) Instantiate (base_blue, Destination_pos, Quaternion.identity);
+					BuildingScript base_blue_clone = (BuildingScript) Instantiate (base_blue, building_pos, Quaternion.identity);
 					base_blue_clone.transform.name = "base_blue";
 //					base_blue_clone.transform.parent = base_blue_parent.transform;
 //					base_blue_clone.transform.parent.name = "base_blue";
