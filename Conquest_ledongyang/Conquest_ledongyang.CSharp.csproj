@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\BuildingScript.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\DisplayScript.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\MenuScript.cs" />
     <Compile Include="Assets\Scripts\UnitScript.cs" />
   </ItemGroup>

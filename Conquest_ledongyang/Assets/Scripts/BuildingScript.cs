@@ -7,7 +7,8 @@ public class BuildingScript : MonoBehaviour {
 	private float troopSpawnRate = 1;
 	public float TroopNum = 0;
 	public UnitScript unit_red, unit_blue;
-	private Vector3 instantiate_pos;
+    private Vector3 instantiate_pos;
+    
    
     
    
@@ -15,7 +16,6 @@ public class BuildingScript : MonoBehaviour {
 	void Start () {
         //This is to show the starting troop number.
 		GetComponentInChildren< TextMesh > ().text = TroopNum.ToString ();
-
 	}
 	
 	// Update is called once per frame
@@ -49,23 +49,12 @@ public class BuildingScript : MonoBehaviour {
 		}
 
 		GetComponentInChildren< TextMesh > ().text = Mathf.Round (TroopNum).ToString ();
-	    
-		if (TroopNum < 0) {
-            GameObject current = gameObject;
-            Debug.Log(current.transform.position);
-            if (displayScript.buildingName == "base_blue")
-            {
-                Debug.Log("Changed to red");
-                displayScript.buildingName = "base_red";
 
-            }
-            else if (displayScript.buildingName == "base_red")
-            {
-                Debug.Log("Changed to blue");
-                displayScript.buildingName = "base_blue";
-            }
-			Destroy (current);
-		}
+        if (TroopNum < 0)
+        {
+            GameObject current = gameObject;
+            Destroy(current);
+        }
 	}
 
 
