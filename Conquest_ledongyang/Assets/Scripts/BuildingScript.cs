@@ -25,17 +25,15 @@ public class BuildingScript : MonoBehaviour {
 		TroopNum = TroopNum + (Time.deltaTime * troopSpawnRate);
 		GameObject display = GameObject.Find ("Display");
 		DisplayScript displayScript = display.GetComponent< DisplayScript > ();
-        instantiate_pos = displayScript.building_origin_pos;
-      //  if (displayScript.reinforce)
-      //  {
-      //      instantiate_pos = gameObject.transform.position;
-      //  }
+		instantiate_pos = displayScript.building_origin_pos;
 
-        //check if Instantiate unit from building
-        if (displayScript.instantiate_unit) {
-            if (displayScript.buildingName == "base_red"){
+
+		//check if Instantiate unit from building
+		if (displayScript.instantiate_unit) {
+
+			if(displayScript.buildingName == "base_red"){
 				Debug.Log ("red");
-                UnitScript unit_red_clone = (UnitScript)Instantiate (unit_red, instantiate_pos, Quaternion.identity);
+				UnitScript unit_red_clone = (UnitScript)Instantiate (unit_red, instantiate_pos, Quaternion.identity);
 				unit_red_clone.transform.name = "unit_red";
 				displayScript.instantiate_unit = false;
 
