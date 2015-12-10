@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour {
         restartText.text = "";
         gameOver = false;
         restart = false;
-        spawnWait = 0;
+        spawnWait = 2;
         target = GameObject.Find("base_red");
         StartCoroutine(Spawn());
 	
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour {
 	}
     IEnumerator Spawn()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(10);
         while (true)
         {
             int max = 0;
@@ -78,6 +78,7 @@ public class GameManager : MonoBehaviour {
             UnitScript unit_blue_clone = (UnitScript)Instantiate(unit_blue, attacker.transform.position, Quaternion.identity);
             unit_blue_clone.GetComponentInChildren<TextMesh>().text = unit_blue_clone.UnitCount.ToString();
             unit_blue_clone.UnitCount = script.TroopNum;
+            unit_blue_clone.Origin_pos = attacker.transform.position;
             unit_blue_clone.target_pos = target.transform.position;
             unit_blue_clone.transform.name = "unit_blue";
             spawnWait ++;
