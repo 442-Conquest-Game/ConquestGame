@@ -42,7 +42,7 @@ public class BuildingScript : MonoBehaviour {
 
 			if(displayScript.buildingName == "base_red"){
 				UnitScript unit_red_clone = (UnitScript)Instantiate (unit_red, instantiate_pos, Quaternion.identity);
-                unit_red_clone.UnitCount = TroopNum / 2;
+                unit_red_clone.UnitCount = TroopNum/2;
 				unit_red_clone.transform.name = "unit_red";
 				displayScript.instantiate_unit = false;
 
