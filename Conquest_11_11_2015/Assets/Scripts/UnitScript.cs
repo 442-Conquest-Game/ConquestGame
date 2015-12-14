@@ -15,8 +15,7 @@ public class UnitScript : MonoBehaviour {
     
     public GameManager managerScript;
     private CastleDatabase data;
-	//public GameObject base_red_parent, base_blue_parent;
-	//private string ObjectName, ObjectName_Destination;
+	
 	// Use this for initialization
 	void Start () {
 		GameObject display = GameObject.Find ("Display");
@@ -30,6 +29,7 @@ public class UnitScript : MonoBehaviour {
         {
             Origin_pos = displayScript.building_origin_pos;
         }
+        
 		Origin_pos.z = 0;
 		GetComponentInChildren < TextMesh > ().text = UnitCount.ToString ();
 	}
@@ -65,25 +65,52 @@ public class UnitScript : MonoBehaviour {
 				if(troopNum-UnitCount < 0){
 					new_building_pos = other.gameObject.transform.position;
 					Destroy (other.gameObject);
-                    managerScript.redCount++;
-                    managerScript.blueCount--;
-                    if(managerScript.blueCount == 0)
-                    {
-                        managerScript.endGameText.text = "Red Wins!";
-                        managerScript.gameOver = true;
-                    }
+                    
 					GameObject display = GameObject.Find ("Display");
 					DisplayScript displayScript = display.GetComponent < DisplayScript > ();
 					Destination_pos = displayScript.building_destination_pos;
 
-					BuildingScript base_red_clone = (BuildingScript) Instantiate (base_red, new_building_pos, Quaternion.identity);
+					GameObject base_red_clone = (GameObject) Instantiate (base_red, new_building_pos, Quaternion.identity);
 					base_red_clone.transform.name = "base_red";
 					BuildingScript NewBuildingScript = base_red_clone.GetComponent < BuildingScript >();
 					NewBuildingScript.TroopNum = -(troopNum-UnitCount);
-				}
+
+                    managerScript.redCount++;
+                    managerScript.blueCount--;
+                    GameObject[] temp = managerScript.player;
+                    managerScript.player = new GameObject[managerScript.redCount];
+                    for (int i = 0; i < 6; i++)
+                    {
+                        if (data.castles[i] == other.gameObject)
+                        {
+                            data.castles[i] = base_red_clone;
+                        }
+                    }
+                    for (int i = 0; i < managerScript.redCount - 1; i++)
+                    {
+                        managerScript.player[i] = temp[i];
+                    }
+                    managerScript.player[managerScript.redCount - 1] = base_red_clone;
+                    managerScript.AI = new GameObject[managerScript.blueCount];
+                    j = 0;
+                    for (int i = 0; i < 6; i++)
+                    {
+                        if(data.castles[i].transform.name == "base_blue")
+                        {
+                            managerScript.AI[j] = data.castles[i];
+                            j++;
+                        }
+                    }
+                    
+                    if (managerScript.blueCount == 0)
+                    {
+                        managerScript.endGameText.text = "Red Wins!";
+                        managerScript.gameOver = true;
+                    }
+                }
 				Destroy (gameObject);
 			}
-           
+            
 			if(other.gameObject.transform.name == "base_red" && other.transform.position != Origin_pos) {
 				BuildingScript buildingScript = other.gameObject.GetComponent< BuildingScript >();
 				troopNum = buildingScript.TroopNum;
@@ -107,6 +134,7 @@ public class UnitScript : MonoBehaviour {
 				EnemyCount = unit_script.UnitCount;
 				if(UnitCount > EnemyCount){
 					UnitCount = UnitCount - EnemyCount;
+                    Destroy(other.gameObject);
 				}
 				else if(UnitCount <= EnemyCount){
 					Destroy (gameObject);
@@ -208,6 +236,7 @@ public class UnitScript : MonoBehaviour {
 				EnemyCount = unit_script.UnitCount;
 				if(UnitCount > EnemyCount){
 					UnitCount = UnitCount - EnemyCount;
+                    Destroy(other.gameObject);
 				}
 				else if(UnitCount <= EnemyCount){
 					Destroy (gameObject);

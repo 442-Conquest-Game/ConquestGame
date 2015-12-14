@@ -14,13 +14,15 @@ public class DisplayScript : MonoBehaviour {
 	public bool instantiate_unit = false;
     public int troop_num;
 	private Transform attacker;
-	public int blue_gold=100, red_gold=110, gold;
-	public BuildingScript upgrade_base_red, upgrade_base_blue, base_red, base_blue;
+	public int blue_gold=0, red_gold=0, gold;
+	public GameObject upgrade_base_red, upgrade_base_blue, base_red, base_blue;
+    public UnitScript unit_red;
+    private GameManager manager;
+    private GameObject currentCastle;
 
-	
-	// Use this for initialization
-	void Start () {
-	  
+    // Use this for initialization
+    void Start () {
+        manager = GameObject.Find("GameManager").GetComponent<GameManager>();
 	}
 
 	void Update() {
@@ -66,7 +68,6 @@ public class DisplayScript : MonoBehaviour {
 		if (Physics.Raycast (ray, out hit) && Input.GetMouseButtonDown (0) && attack == false && deploy == false && mine == false) {
 			attacker = hit.transform.parent;
 			buildingName = hit.transform.parent.name;
-			//buildingGroup = hit.transform.parent.parent.name;
 			building_origin_pos = hit.transform.position;
 		}
 		GUI.Label (new Rect (20, 10, 100, 20), buildingName);
@@ -81,40 +82,45 @@ public class DisplayScript : MonoBehaviour {
 			if (GUI.Button (new Rect (20,120,60,20), "Mine")){
 				mine = true;
 			}
-			if (GUI.Button (new Rect (0, 160, 100, 20), "Upgrade $100")){
-				if(buildingName == "base_red" && red_gold >= 100){
-					red_gold = red_gold - 100;
-					BuildingScript buildingScript = attacker.GetComponent < BuildingScript >();
-					troop_num = buildingScript.TroopNum;
-					buildingScript.destroy_self = true;
+			if (GUI.Button (new Rect (0, 160, 100, 20), "Upgrade $50")){
+                if (buildingName == "base_red" && red_gold >= 50)
+                {
+                    red_gold = red_gold - 50;
 
-					BuildingScript base_red_clone = (BuildingScript) Instantiate (upgrade_base_red, building_origin_pos, Quaternion.identity);
-					base_red_clone.transform.name = "base_red";
-					BuildingScript buildingscript = base_red_clone.GetComponent< BuildingScript >();
-					buildingscript.TroopNum = troop_num;
-					buildingscript.rate = buildingscript.rate*0.5f;
-				}
-				if(buildingName == "base_blue" && blue_gold >= 100){
-					blue_gold = blue_gold - 100;
-					BuildingScript buildingScript = attacker.GetComponent < BuildingScript >();
-					troop_num = buildingScript.TroopNum;
-					buildingScript.destroy_self = true;
+                    BuildingScript buildingScript = attacker.GetComponent<BuildingScript>();
+                    troop_num = buildingScript.TroopNum;
+                    GameObject base_red_clone = (GameObject)Instantiate(upgrade_base_red, building_origin_pos, Quaternion.identity);
+                    base_red_clone.transform.name = "base_red";
+                    BuildingScript buildingscript = base_red_clone.GetComponent<BuildingScript>();
+                    buildingscript.TroopNum = troop_num;
+                    buildingscript.rate = buildingscript.rate * 0.5f;
+                    buildingScript.destroy_self = true;
+                    for (int i = 0; i < manager.redCount; i++)
+                    {
+                        if (building_origin_pos == manager.player[i].transform.position)
+                        {
+                            manager.player[i] = base_red_clone;
+                        }
+                    }
+                    CastleDatabase data = GameObject.Find("Building Database").GetComponent<CastleDatabase>();
+                    for (int i = 0; i < 6; i++)
+                    {
+                        if (building_origin_pos == data.castles[i].transform.position)
+                        {
+                            data.castles[i] = base_red_clone;
+                        }
+                    }
 
-					BuildingScript base_blue_clone = (BuildingScript) Instantiate (upgrade_base_blue, building_origin_pos, Quaternion.identity);
-					base_blue_clone.transform.name = "base_blue";
-					BuildingScript buildingscript = base_blue_clone.GetComponent< BuildingScript >();
-					buildingscript.TroopNum = troop_num;
-					buildingscript.rate = buildingscript.rate*0.5f;
-				}
+
+
+
+
+                }
 			}
 			if (GUI.Button (new Rect (0, 200, 100, 20), "Build $100")){
 				if(buildingName == "base_red" && red_gold >= 100){
 					red_build = true;
 					red_gold = red_gold - 100;
-				}
-				if(buildingName == "base_blue" && blue_gold >= 100){
-					blue_build = true;
-					blue_gold = blue_gold - 100;
 				}
 				
 			}
@@ -131,14 +137,19 @@ public class DisplayScript : MonoBehaviour {
             if (hit.transform.parent.name != buildingName)
             {
                 attack = false;
-                instantiate_unit = true;
+                
                 building_destination_pos = hit.transform.position;
                 buildingName_destination = hit.transform.parent.name;
                 BuildingScript buildingScript = attacker.GetComponent<BuildingScript>();
                 troop_num = buildingScript.TroopNum;
                 if (troop_num > 1)
                 {
-                    buildingScript.TroopNum = troop_num - troop_num / 2;
+                    instantiate_unit = true;
+                    UnitScript unit_red_clone = (UnitScript)Instantiate(buildingScript.unit_red, building_origin_pos, Quaternion.identity);
+                    unit_red_clone.UnitCount = buildingScript.TroopNum / 2;
+                    unit_red_clone.transform.name = "unit_red";
+                    instantiate_unit = false;
+                    buildingScript.TroopNum = buildingScript.TroopNum / 2;
                 }
                 else
                 {
@@ -164,7 +175,12 @@ public class DisplayScript : MonoBehaviour {
                 troop_num = buildingScript.TroopNum;
                 if (troop_num > 1)
                 {
-                    buildingScript.TroopNum = troop_num - troop_num / 2;
+                    instantiate_unit = true;
+                    UnitScript unit_red_clone = (UnitScript)Instantiate(buildingScript.unit_red, building_origin_pos, Quaternion.identity);
+                    unit_red_clone.UnitCount = buildingScript.TroopNum / 2;
+                    unit_red_clone.transform.name = "unit_red";
+                    instantiate_unit = false;
+                    buildingScript.TroopNum = buildingScript.TroopNum / 2;
                 }
                 else
                 {
@@ -188,7 +204,12 @@ public class DisplayScript : MonoBehaviour {
                 troop_num = buildingScript.TroopNum;
                 if (troop_num > 1)
                 {
-                    buildingScript.TroopNum = troop_num - troop_num / 2;
+                    instantiate_unit = true;
+                    UnitScript unit_red_clone = (UnitScript)Instantiate(buildingScript.unit_red, building_origin_pos, Quaternion.identity);
+                    unit_red_clone.UnitCount = buildingScript.TroopNum / 2;
+                    unit_red_clone.transform.name = "unit_red";
+                    instantiate_unit = false;
+                    buildingScript.TroopNum = buildingScript.TroopNum / 2; 
                     
                 }
                 else
@@ -216,7 +237,7 @@ public class DisplayScript : MonoBehaviour {
 		}
 
 		GUI.Label (new Rect (10, 0, 40, 100), "Gold:");
-		GUI.Label (new Rect (50, 0, 100, 100), gold.ToString());
+		GUI.Label (new Rect (50, 0, 100, 100), red_gold.ToString());
 		GUI.EndGroup ();
 	}
 }

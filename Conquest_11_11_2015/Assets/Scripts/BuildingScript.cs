@@ -31,25 +31,11 @@ public class BuildingScript : MonoBehaviour {
 			TroopNum++;
 			time = Time.time;
 		}
-		GameObject display = GameObject.Find ("Display");
-		DisplayScript displayScript = display.GetComponent< DisplayScript > ();
-		instantiate_pos = displayScript.building_origin_pos;
+		
 		instantiate_pos.z = 0;
         game = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
 
-		//check if Instantiate unit from building
-		if (displayScript.instantiate_unit) {
-
-			if(displayScript.buildingName == "base_red"){
-				UnitScript unit_red_clone = (UnitScript)Instantiate (unit_red, instantiate_pos, Quaternion.identity);
-                unit_red_clone.UnitCount = TroopNum / 2;
-				unit_red_clone.transform.name = "unit_red";
-				displayScript.instantiate_unit = false;
-
-			}
-
-		}
-
+		      
 		GetComponentInChildren< TextMesh > ().text = TroopNum.ToString ();
 	    
         }
