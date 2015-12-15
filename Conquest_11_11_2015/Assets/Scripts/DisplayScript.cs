@@ -5,18 +5,15 @@ public class DisplayScript : MonoBehaviour {
 
 	public GUISkin resourceSkin, ordersSkin;
 	private const int RESOURCE_BOX_HEIGHT = 30, ORDERS_BOX_WIDTH = 100;
-	public string buildingName, buildingName_destination, buildingGroup;
+	public static string buildingName, buildingName_destination, buildingGroup;
 	public Vector3 building_origin_pos;
 	public Vector3 building_destination_pos;
 	public Vector3 destination_pos;
 	private Vector3 new_building_pos;
 	public bool attack = false, deploy = false, mine = false, red_build= false, blue_build=false;
-	public bool instantiate_unit = false;
+	public static bool  instantiate_unit = false;
     public int troop_num;
 	private Transform attacker;
-<<<<<<< HEAD
-	public int blue_gold=0, red_gold=0, gold;
-	public GameObject upgrade_base_red, upgrade_base_blue, base_red, base_blue;
     public UnitScript unit_red;
     private GameManager manager;
     private GameObject currentCastle;
@@ -24,7 +21,7 @@ public class DisplayScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         manager = GameObject.Find("GameManager").GetComponent<GameManager>();
-=======
+	}
 	public int blue_gold=100, red_gold=110, gold;
 	public BuildingScript upgrade_base_red, upgrade_base_blue, base_red, base_blue;
 	private GameObject placeBuilding;
@@ -32,12 +29,6 @@ public class DisplayScript : MonoBehaviour {
 	public bool isLegalPosition;
 	private bool drawOrder=false;
 	private float x,y;
-	
-	// Use this for initialization
-	void Start () {
-	  
->>>>>>> adbd770818b7b0e01e03e89992218c0487464868
-	}
 
 	void Update() {
 		if (attack) {
@@ -116,9 +107,7 @@ public class DisplayScript : MonoBehaviour {
 						BuildingScript buildingScript = attacker.GetComponent < BuildingScript > ();
 						troop_num = buildingScript.TroopNum;
 						buildingScript.destroy_self = true;
-
-<<<<<<< HEAD
-				attack = true;
+											attack = true;
 			}
 			if (GUI.Button (new Rect (20,80,60,20), "Deploy")){
 				deploy = true;
@@ -167,7 +156,6 @@ public class DisplayScript : MonoBehaviour {
 					red_gold = red_gold - 100;
 				}
 				
-=======
 						BuildingScript base_red_clone = (BuildingScript)Instantiate (upgrade_base_red, building_origin_pos, Quaternion.identity);
 						base_red_clone.transform.name = "base_red";
 						BuildingScript buildingscript = base_red_clone.GetComponent< BuildingScript > ();
@@ -209,7 +197,6 @@ public class DisplayScript : MonoBehaviour {
 				if (GUI.Button (new Rect (0, 40, 100, 20), "Cancel")) {
 					drawOrder = false;
 				}
->>>>>>> adbd770818b7b0e01e03e89992218c0487464868
 			}
 			GUI.EndGroup ();
 		}
