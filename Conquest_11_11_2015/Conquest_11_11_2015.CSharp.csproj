@@ -74,6 +74,7 @@
     <Compile Include="Assets\Scripts\DisplayScript.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\MenuScript.cs" />
+    <Compile Include="Assets\Scripts\PlaceBuildingScript.cs" />
     <Compile Include="Assets\Scripts\UnitScript.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
