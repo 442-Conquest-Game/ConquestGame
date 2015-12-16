@@ -34,9 +34,25 @@ public class BuildingScript : MonoBehaviour {
 		
 		instantiate_pos.z = 0;
         game = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
+<<<<<<< HEAD
 
 
 		     
+=======
+		//check if Instantiate unit from building
+		if (DisplayScript.instantiate_unit) {
+
+			if(DisplayScript.buildingName == "base_red"){
+				UnitScript unit_red_clone = (UnitScript)Instantiate (unit_red, instantiate_pos, Quaternion.identity);
+                unit_red_clone.UnitCount = TroopNum/2;
+				unit_red_clone.transform.name = "unit_red";
+				DisplayScript.instantiate_unit = false;
+
+			}
+
+		}
+
+>>>>>>> b865957327431b6e2bce3e79f91fd1a4f40ed344
 		GetComponentInChildren< TextMesh > ().text = TroopNum.ToString ();
 	    
         }
